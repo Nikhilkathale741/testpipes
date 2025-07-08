@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  db-migrator:
+    build: .
+    container_name: rds-migration
+    volumes:
+      - ./keys:/app/keys:ro  # Mount SSH keys
+      - ./logs:/app/logs     # Mount logs directory
+      - ./.env:/app/.env:ro  # Mount environment file
+    environment:
+      - PYTHONUNBUFFERED=1
+    networks:
+      - migration-network
+    restart: "no"  # Don't restart automatically
+
+networks:
+  migration-network:
+    driver: bridge
